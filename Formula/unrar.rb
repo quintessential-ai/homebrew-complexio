@@ -14,6 +14,21 @@ class Unrar < Formula
     
     # Install headers
     include.install "dll.hpp"
+    
+    # Create pkg-config file
+    (lib/"pkgconfig").mkpath
+    (lib/"pkgconfig/libunrar.pc").write <<~EOS
+      prefix=#{prefix}
+      exec_prefix=${prefix}
+      libdir=${exec_prefix}/lib
+      includedir=${prefix}/include
+
+      Name: libunrar
+      Description: RAR archive extraction library
+      Version: #{version}
+      Libs: -L${libdir} -lunrar
+      Cflags: -I${includedir}
+    EOS
   end
 
   test do
